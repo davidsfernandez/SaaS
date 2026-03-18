@@ -21,6 +21,7 @@ builder.Services.AddMemoryCache();
 
 // Configure Application Settings
 builder.Services.Configure<AsaasSettings>(builder.Configuration.GetSection("AsaasSettings"));
+builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGridSettings"));
 
 // Configure Database Context (PostgreSQL)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -35,6 +36,7 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IBillingService, BillingService>();
 builder.Services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
 builder.Services.AddHttpClient<IAsaasService, AsaasService>();
+builder.Services.AddHttpClient<IEmailService, EmailService>();
 
 // Configure Identity System
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

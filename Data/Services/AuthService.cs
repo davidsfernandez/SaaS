@@ -17,6 +17,7 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _context;
     private readonly IAsaasService _asaasService;
+    private readonly IEmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
 
@@ -24,12 +25,14 @@ public class AuthService : IAuthService
         UserManager<ApplicationUser> userManager,
         ApplicationDbContext context,
         IAsaasService asaasService,
+        IEmailService emailService,
         IConfiguration configuration,
         ILogger<AuthService> logger)
     {
         _userManager = userManager;
         _context = context;
         _asaasService = asaasService;
+        _emailService = emailService;
         _configuration = configuration;
         _logger = logger;
     }
@@ -93,6 +96,26 @@ public class AuthService : IAuthService
             }
 
             await transaction.CommitAsync();
+
+            // 4. Trigger Welcome Email (Non-blocking)
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var placeholders = new Dictionary<string, string>
+                    {
+                        { "CompanyName", "SaasAsaasApp" }, // Or get from config
+                        { "UserName", user.FullName ?? user.Email! }
+                    };
+
+                    await _emailService.SendEmailAsync(user.Email!, "Welcome to SaasAsaasApp!", "welcome.html", placeholders);
+                    _logger.LogInformation("Welcome email triggered for {Email}", user.Email);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error sending welcome email to {Email}", user.Email);
+                }
+            });
 
             return new AuthResponse
             {

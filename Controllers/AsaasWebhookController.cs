@@ -5,6 +5,7 @@ using SaasAsaasApp.Configurations;
 using SaasAsaasApp.Data;
 using SaasAsaasApp.Data.Entities;
 using SaasAsaasApp.Data.Enums;
+using SaasAsaasApp.Data.Interfaces;
 using SaasAsaasApp.Models.Asaas;
 using System.Text.Json;
 
@@ -15,15 +16,18 @@ namespace SaasAsaasApp.Controllers;
 public class AsaasWebhookController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly IEmailService _emailService;
     private readonly AsaasSettings _settings;
     private readonly ILogger<AsaasWebhookController> _logger;
 
     public AsaasWebhookController(
         ApplicationDbContext context, 
+        IEmailService emailService,
         IOptions<AsaasSettings> settings, 
         ILogger<AsaasWebhookController> logger)
     {
         _context = context;
+        _emailService = emailService;
         _settings = settings.Value;
         _logger = logger;
     }
@@ -110,11 +114,50 @@ public class AsaasWebhookController : ControllerBase
             case "PAYMENT_RECEIVED":
                 tenant.Status = TenantStatus.Active;
                 _logger.LogInformation("Tenant {TenantId} activated via payment confirmation", tenant.Id);
+                
+                // Trigger Payment Confirmed Email (Non-blocking)
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var placeholders = new Dictionary<string, string>
+                        {
+                            { "CompanyName", "SaasAsaasApp" },
+                            { "Amount", eventData.Payment.Value.ToString("C") },
+                            { "Date", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") }
+                        };
+                        await _emailService.SendEmailAsync(tenant.Email, "Payment Confirmed - SaasAsaasApp", "payment-confirmed.html", placeholders);
+                        _logger.LogInformation("Payment confirmation email triggered for {Email}", tenant.Email);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error sending payment confirmation email to {Email}", tenant.Email);
+                    }
+                });
                 break;
 
             case "PAYMENT_OVERDUE":
                 tenant.Status = TenantStatus.Overdue;
                 _logger.LogWarning("Tenant {TenantId} marked as OVERDUE", tenant.Id);
+
+                // Trigger Payment Overdue Email (Non-blocking)
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var placeholders = new Dictionary<string, string>
+                        {
+                            { "CompanyName", "SaasAsaasApp" },
+                            { "BillingUrl", "https://your-app.com/billing" } // Should be dynamic in production
+                        };
+                        await _emailService.SendEmailAsync(tenant.Email, "Payment Overdue - SaasAsaasApp", "payment-overdue.html", placeholders);
+                        _logger.LogInformation("Payment overdue email triggered for {Email}", tenant.Email);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error sending payment overdue email to {Email}", tenant.Email);
+                    }
+                });
                 break;
 
             case "PAYMENT_DELETED":
