@@ -1,0 +1,62 @@
+@page
+@model SaasAsaasApp.Pages.Billing.OnboardingModel
+@{
+    ViewData["Title"] = "Complete your Activation";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2 class="mb-4">Welcome, @Model.CompanyName!</h2>
+            <p class="lead text-muted">You're just one step away from activating your SaaS dashboard.</p>
+            
+            <div class="card border-primary mb-4 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Selected Plan: @Model.PlanName</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="display-4 mb-0">R$ @Model.Amount.ToString("N2")</h3>
+                    <p class="text-muted">Monthly subscription</p>
+                    <hr />
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <i class="bi bi-qr-code-scan display-6 text-primary mb-2"></i>
+                                <h6>Pay with PIX</h6>
+                                <p class="small text-muted">Instant activation. Use your banking app to scan the code.</p>
+                                <button class="btn btn-outline-primary btn-sm">Generate PIX QR Code</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <i class="bi bi-barcode display-6 text-primary mb-2"></i>
+                                <h6>Boleto Bancário</h6>
+                                <p class="small text-muted">Activation within 24-48 hours after payment.</p>
+                                <button class="btn btn-outline-primary btn-sm">Download Boleto PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Note:</strong> Once your payment is confirmed by Asaas, your dashboard will be automatically unlocked.
+            </div>
+
+            <p class="mt-4">
+                <a asp-page="/Index" class="text-decoration-none small">
+                    <i class="bi bi-arrow-left"></i> Back to Home
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .bi { vertical-align: middle; }
+    </style>
+}

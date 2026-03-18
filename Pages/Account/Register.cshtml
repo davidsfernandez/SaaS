@@ -1,0 +1,66 @@
+@page
+@model SaasAsaasApp.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register your Company";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm mt-5">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>Start your SaaS Journey</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                    <h5 class="mb-3 border-bottom pb-2">Administrator Details</h5>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.FullName" class="form-control" placeholder="John Doe" />
+                        <label asp-for="Input.FullName"></label>
+                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" />
+                        <label asp-for="Input.Email"></label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" placeholder="password" />
+                        <label asp-for="Input.Password"></label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <h5 class="mb-3 mt-4 border-bottom pb-2">Company Details</h5>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.CompanyName" class="form-control" placeholder="Acme Corp" />
+                        <label asp-for="Input.CompanyName"></label>
+                        <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.TaxId" class="form-control" placeholder="00.000.000/0001-00" />
+                        <label asp-for="Input.TaxId"></label>
+                        <span asp-validation-for="Input.TaxId" class="text-danger"></span>
+                    </div>
+
+                    <h5 class="mb-3 mt-4 border-bottom pb-2">Choose your Plan</h5>
+                    <div class="mb-4">
+                        <select asp-for="Input.PlanId" asp-items="Model.Plans" class="form-select form-select-lg">
+                            <option value="">-- Select a Plan --</option>
+                        </select>
+                        <span asp-validation-for="Input.PlanId" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="w-100 btn btn-lg btn-primary py-3 mt-2">Create Account & Pay</button>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                Already have an account? <a asp-page="./Login">Login here</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

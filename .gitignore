@@ -1,0 +1,19 @@
+# AI and Planning Exclusions
+conductor/
+.gemini/
+.geminiignore
+.gemini_security/
+GEMINI.md
+
+# .docker directory (local data)
+.docker/
+
+# ASP.NET Core specific
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.doccache
+
+# User Secret storage
+/Properties/launchSettings.json
