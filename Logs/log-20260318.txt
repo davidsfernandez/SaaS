@@ -1,0 +1,10 @@
+2026-03-18 03:56:56.288 -03:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "SubscriptionPlans" AS s
+    WHERE NOT (s."IsDeleted"))
+2026-03-18 03:56:56.501 -03:00 [INF] User profile is available. Using 'C:\Users\david\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-18 03:56:56.829 -03:00 [INF] Now listening on: http://localhost:5173
+2026-03-18 03:56:56.832 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-18 03:56:56.834 -03:00 [INF] Hosting environment: Development
+2026-03-18 03:56:56.835 -03:00 [INF] Content root path: C:\Users\david\SaaSProject\SaasAsaasApp

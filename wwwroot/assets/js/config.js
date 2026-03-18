@@ -10,7 +10,6 @@
  !Please use the hex color code (#000) here. Don't use rgba(), hsl(), etc
 */
 window.config = {
-  // global color variables for charts except chartjs
   colors: {
     primary: window.Helpers.getCssVar('primary'),
     secondary: window.Helpers.getCssVar('secondary'),
@@ -38,8 +37,5 @@ window.config = {
     dark: window.Helpers.getCssVar('dark-bg-subtle')
   },
   fontFamily: window.Helpers.getCssVar('font-family-base'),
-  enableMenuLocalStorage: true // Enable menu state with local storage support
 };
 
-window.assetsPath = document.documentElement.getAttribute('data-assets-path');
-window.templateName = document.documentElement.getAttribute('data-template');

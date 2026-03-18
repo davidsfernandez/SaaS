@@ -4,7 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
+<html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -18,24 +18,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
-    <!-- Icons. Default: boxicons -->
-    <link rel="stylesheet" href="~/assets/vendor/fonts/boxicons.css" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="~/assets/vendor/fonts/iconify-icons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="~/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="~/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="~/assets/vendor/css/core.css" />
     <link rel="stylesheet" href="~/assets/css/demo.css" />
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="~/assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <!-- Page CSS -->
     @await RenderSectionAsync("Styles", required: false)
 
     <!-- Helpers -->
     <script src="~/assets/vendor/js/helpers.js"></script>
-
-    <!-- Config -->
     <script src="~/assets/js/config.js"></script>
 </head>
 
@@ -52,22 +50,10 @@
                         <a asp-page="/Index" class="app-brand-link">
                             <span class="app-brand-logo demo">
                                 <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    <defs>
-                                        <path d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.24599937,34.4417935 9.00424854,36.0665439 L9.2637431,36.1612488 L9.12735957,36.215118 L12.1788116,38.4017003 C12.1788116,38.4017003 13.1309381,39.2962729 14.5040351,39.1258989 C15.8771321,38.955525 16.7795395,37.8971274 16.7795395,37.8971274 L16.7795395,37.8971274 L31.4527242,14.2441333 C32.3237433,12.7962893 32.3039435,11.5462719 31.3930301,10.3996254 C30.2627934,8.98461751 28.492496,8.15104832 26.0505688,7.89973637 L23.2799047,7.41953261 L13.7918663,0.358365126 Z" id="path-1"></path>
-                                    </defs>
-                                    <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
-                                            <g id="Icon" transform="translate(27.000000, 15.000000)">
-                                                <g id="Mask" transform="translate(0.000000, 8.000000)">
-                                                    <mask id="mask-2" fill="white"><use xlink:href="#path-1"></use></mask>
-                                                    <use fill="#696cff" xlink:href="#path-1"></use>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </g>
+                                    <path d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.24599937,34.4417935 9.00424854,36.0665439 L9.2637431,36.1612488 L9.12735957,36.215118 L12.1788116,38.4017003 C12.1788116,38.4017003 13.1309381,39.2962729 14.5040351,39.1258989 C15.8771321,38.955525 16.7795395,37.8971274 16.7795395,37.8971274 L16.7795395,37.8971274 L31.4527242,14.2441333 C32.3237433,12.7962893 32.3039435,11.5462719 31.3930301,10.3996254 C30.2627934,8.98461751 28.492496,8.15104832 26.0505688,7.89973637 L23.2799047,7.41953261 L13.7918663,0.358365126 Z" fill="#696cff" />
                                 </svg>
                             </span>
-                            <span class="app-brand-text demo menu-text fw-bolder ms-2">SaasAsaas</span>
+                            <span class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize">SaasAsaas</span>
                         </a>
 
                         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -133,15 +119,6 @@
                     </div>
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        <!-- Search -->
-                        <div class="navbar-nav align-items-center">
-                            <div class="nav-item d-flex align-items-center">
-                                <i class="bx bx-search fs-4 lh-0"></i>
-                                <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
-                            </div>
-                        </div>
-                        <!-- /Search -->
-
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->
                             @if (SignInManager.IsSignedIn(User))
@@ -178,9 +155,9 @@
                                         <li><div class="dropdown-divider"></div></li>
                                         <li>
                                             <form class="form-inline" asp-page="/Account/Logout" method="post">
-                                                <button type="submit" class="dropdown-item">
-                                                    <i class="bx bx-power-off me-2 text-danger"></i>
-                                                    <span class="align-middle text-danger">Log Out</span>
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="bx bx-power-off me-2"></i>
+                                                    <span class="align-middle">Log Out</span>
                                                 </button>
                                             </form>
                                         </li>
@@ -213,8 +190,8 @@
                     <!-- Footer -->
                     <footer class="content-footer footer bg-footer-theme">
                         <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                            <div class="mb-2 mb-md-0">
-                                © 2026, made with ❤️ by David Fernandez
+                            <div class="mb-2 mb-md-0 text-muted">
+                                © 2026 SaasAsaasApp. All rights reserved.
                             </div>
                         </div>
                     </footer>

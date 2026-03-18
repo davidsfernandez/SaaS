@@ -1,105 +1,88 @@
 @page
 @model SaasAsaasApp.Pages.Account.RegisterModel
 @{
-    Layout = "_Layout";
+    Layout = "_AuthLayout";
     ViewData["Title"] = "Register";
 }
 
-<div class="container-xxl">
-    <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner py-4">
-            <!-- Register Card -->
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <!-- Logo -->
-                    <div class="app-brand justify-content-center mb-4">
-                        <a asp-page="/Index" class="app-brand-link gap-2">
-                            <span class="app-brand-logo demo">
-                                <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    <path d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.24599937,34.4417935 9.00424854,36.0665439 L9.2637431,36.1612488 L9.12735957,36.215118 L12.1788116,38.4017003 C12.1788116,38.4017003 13.1309381,39.2962729 14.5040351,39.1258989 C15.8771321,38.955525 16.7795395,37.8971274 16.7795395,37.8971274 L16.7795395,37.8971274 L31.4527242,14.2441333 C32.3237433,12.7962893 32.3039435,11.5462719 31.3930301,10.3996254 C30.2627934,8.98461751 28.492496,8.15104832 26.0505688,7.89973637 L23.2799047,7.41953261 L13.7918663,0.358365126 Z" fill="#696cff" />
-                                </svg>
-                            </span>
-                            <span class="app-brand-text demo text-body fw-bolder ms-2 text-capitalize">SaasAsaas</span>
-                        </a>
-                    </div>
-                    <!-- /Logo -->
-                    <h4 class="mb-2">Adventure starts here 🚀</h4>
-                    <p class="mb-4">Make your app management easy and fun!</p>
+<!-- Register Card -->
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <!-- Logo -->
+        <div class="app-brand justify-content-center mb-4">
+            <a asp-page="/Index" class="app-brand-link gap-2">
+                <span class="app-brand-logo demo">
+                    <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.24599937,34.4417935 9.00424854,36.0665439 L9.2637431,36.1612488 L9.12735957,36.215118 L12.1788116,38.4017003 C12.1788116,38.4017003 13.1309381,39.2962729 14.5040351,39.1258989 C15.8771321,38.955525 16.7795395,37.8971274 16.7795395,37.8971274 L16.7795395,37.8971274 L31.4527242,14.2441333 C32.3237433,12.7962893 32.3039435,11.5462719 31.3930301,10.3996254 C30.2627934,8.98461751 28.492496,8.15104832 26.0505688,7.89973637 L23.2799047,7.41953261 L13.7918663,0.358365126 Z" fill="#696cff" />
+                    </svg>
+                </span>
+                <span class="app-brand-text demo text-body fw-bolder ms-2 text-capitalize">SaasAsaas</span>
+            </a>
+        </div>
+        <!-- /Logo -->
+        <h4 class="mb-2 text-center">Adventure starts here 🚀</h4>
+        <p class="mb-4 text-center">Make your app management easy and fun!</p>
 
-                    <form id="formAuthentication" class="mb-3" method="POST">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
-                        <div class="mb-3">
-                            <label asp-for="Input.FullName" class="form-label">Full Name</label>
-                            <input asp-for="Input.FullName" class="form-control" placeholder="Enter your name" autofocus />
-                            <span asp-validation-for="Input.FullName" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Input.Email" class="form-label">Email</label>
-                            <input asp-for="Input.Email" class="form-control" placeholder="Enter your email" />
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3 form-password-toggle">
-                            <label asp-for="Input.Password" class="form-label">Password</label>
-                            <div class="input-group input-group-merge">
-                                <input asp-for="Input.Password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                            </div>
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
+        <form id="formAuthentication" class="mb-3" method="POST">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Input.FullName" class="form-label">Full Name</label>
+                <input asp-for="Input.FullName" class="form-control" placeholder="Enter your name" autofocus />
+                <span asp-validation-for="Input.FullName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.Email" class="form-label">Email</label>
+                <input asp-for="Input.Email" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-password-toggle">
+                <label asp-for="Input.Password" class="form-label">Password</label>
+                <div class="input-group input-group-merge">
+                    <input asp-for="Input.Password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
 
-                        <hr class="my-4">
-                        <h6 class="text-muted fw-normal mb-3">Company Information</h6>
+            <hr class="my-4">
+            <h6 class="text-muted fw-normal mb-3">Company Information</h6>
 
-                        <div class="mb-3">
-                            <label asp-for="Input.CompanyName" class="form-label">Company Name</label>
-                            <input asp-for="Input.CompanyName" class="form-control" placeholder="Acme Inc." />
-                            <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Input.TaxId" class="form-label">Tax ID (CPF/CNPJ)</label>
-                            <input asp-for="Input.TaxId" class="form-control" placeholder="00.000.000/0001-00" />
-                            <span asp-validation-for="Input.TaxId" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Input.PlanId" class="form-label">Subscription Plan</label>
-                            <select asp-for="Input.PlanId" asp-items="Model.Plans" class="form-select">
-                                <option value="">Select a plan</option>
-                            </select>
-                            <span asp-validation-for="Input.PlanId" class="text-danger"></span>
-                        </div>
+            <div class="mb-3">
+                <label asp-for="Input.CompanyName" class="form-label">Company Name</label>
+                <input asp-for="Input.CompanyName" class="form-control" placeholder="Acme Inc." />
+                <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.TaxId" class="form-label">Tax ID (CPF/CNPJ)</label>
+                <input asp-for="Input.TaxId" class="form-control" placeholder="00.000.000/0001-00" />
+                <span asp-validation-for="Input.TaxId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.PlanId" class="form-label">Subscription Plan</label>
+                <select asp-for="Input.PlanId" asp-items="Model.Plans" class="form-select">
+                    <option value="">Select a plan</option>
+                </select>
+                <span asp-validation-for="Input.PlanId" class="text-danger"></span>
+            </div>
 
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" required />
-                                <label class="form-check-label" for="terms-conditions">
-                                    I agree to <a href="javascript:void(0);">privacy policy & terms</a>
-                                </label>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary d-grid w-100">Sign up</button>
-                    </form>
-
-                    <p class="text-center">
-                        <span>Already have an account?</span>
-                        <a asp-page="./Login">
-                            <span>Sign in instead</span>
-                        </a>
-                    </p>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" required />
+                    <label class="form-check-label" for="terms-conditions">
+                        I agree to <a href="javascript:void(0);">privacy policy & terms</a>
+                    </label>
                 </div>
             </div>
-            <!-- Register Card -->
-        </div>
+            <button class="btn btn-primary d-grid w-100" type="submit">Sign up</button>
+        </form>
+
+        <p class="text-center">
+            <span>Already have an account?</span>
+            <a asp-page="./Login">
+                <span>Sign in instead</span>
+            </a>
+        </p>
     </div>
 </div>
-
-@section Styles {
-    <style>
-        .authentication-wrapper { display: flex; flex-basis: 100%; min-height: 100vh; width: 100%; align-items: center; justify-content: center; }
-        .authentication-inner { width: 100%; max-width: 450px; }
-    </style>
-}
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<!-- /Register Card -->

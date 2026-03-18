@@ -147,6 +147,60 @@ public class AuthService : IAuthService
         };
     }
 
+    public async Task<AuthResponse> ForgotPasswordAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            // We return success to avoid email enumeration attacks
+            return new AuthResponse { Success = true, Message = "If the email exists, a reset link has been sent." };
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        
+        // Trigger Email (Non-blocking)
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var resetUrl = $"{_configuration["AppUrl"]}/Account/ResetPassword?email={Uri.EscapeDataString(user.Email!)}&token={Uri.EscapeDataString(token)}";
+                var placeholders = new Dictionary<string, string>
+                {
+                    { "ResetUrl", resetUrl }
+                };
+
+                await _emailService.SendEmailAsync(user.Email!, "Reset your Password", "password-reset.html", placeholders);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending password reset email to {Email}", user.Email);
+            }
+        });
+
+        return new AuthResponse { Success = true, Message = "Reset link sent successfully." };
+    }
+
+    public async Task<AuthResponse> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            return new AuthResponse { Success = false, Message = "Invalid request." };
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+        if (result.Succeeded)
+        {
+            return new AuthResponse { Success = true, Message = "Password has been reset successfully." };
+        }
+
+        return new AuthResponse 
+        { 
+            Success = false, 
+            Message = string.Join(", ", result.Errors.Select(e => e.Description)) 
+        };
+    }
+
     private string GenerateJwtToken(ApplicationUser user)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");

@@ -72,10 +72,10 @@ public class SubscriptionStatusMiddleware
     private bool IsPublicPath(string path)
     {
         return path.StartsWith("/api/webhooks") || 
-               path.StartsWith("/account/login") || 
-               path.StartsWith("/account/register") ||
+               path.StartsWith("/account/") || 
                path.StartsWith("/billing/onboarding") ||
                path.StartsWith("/billing/payment") ||
+               path.Contains("/assets/") ||
                path.Contains("/error") ||
                path.Contains("/lib/") ||
                path.Contains("/css/") ||

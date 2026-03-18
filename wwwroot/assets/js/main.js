@@ -4,7 +4,8 @@
 
 'use strict';
 
-let menu, animate;
+let menu,
+  animate;
 document.addEventListener('DOMContentLoaded', function () {
   // class for ios specific styles
   if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // If current layout is vertical and current window screen is > small
 
   // Auto update menu collapsed/expanded based on the themeConfig
-  window.Helpers.setCollapsed(true, false);
+      window.Helpers.setCollapsed(true, false);
 })();
 // Utils
 function isMacOS() {
