@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.RateLimiting;
 using SaasAsaasApp.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace SaasAsaasApp.Pages.Account;
 
+[EnableRateLimiting("StrictPolicy")]
 public class LoginModel : PageModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;

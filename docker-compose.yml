@@ -20,13 +20,15 @@ services:
       dockerfile: Dockerfile
     container_name: sa_app_web
     restart: always
+    env_file:
+      - .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=db;Database=SA_AppDB;Username=postgres;Password=postgres
     ports:
       - "5000:8080"
     volumes:
       # Volumen persistente para archivos de usuario (Uploads)
       - ./.docker/user_uploads:/app/wwwroot/uploads
+      - ./.docker/logs:/app/Logs
     depends_on:
       - db

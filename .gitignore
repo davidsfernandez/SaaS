@@ -17,3 +17,6 @@ obj/
 
 # User Secret storage
 /Properties/launchSettings.json
+
+# Environment variables
+.env

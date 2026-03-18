@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SaasAsaasApp.Configurations;
@@ -13,6 +14,7 @@ namespace SaasAsaasApp.Controllers;
 
 [ApiController]
 [Route("api/webhooks/asaas")]
+[EnableRateLimiting("StrictPolicy")]
 public class AsaasWebhookController : ControllerBase
 {
     private readonly ApplicationDbContext _context;

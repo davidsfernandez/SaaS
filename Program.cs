@@ -1,8 +1,11 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using SaasAsaasApp.Configurations;
 using SaasAsaasApp.Data;
 using SaasAsaasApp.Data.Entities;
@@ -10,7 +13,15 @@ using SaasAsaasApp.Data.Interfaces;
 using SaasAsaasApp.Data.Services;
 using SaasAsaasApp.Middleware;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog();
 
 // --- Add services to the container ---
 
@@ -18,6 +29,22 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
+
+// Configure Rate Limiting
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("StrictPolicy", opt =>
+    {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+});
+
+// Configure Health Checks
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
 // Configure Application Settings
 builder.Services.Configure<AsaasSettings>(builder.Configuration.GetSection("AsaasSettings"));
@@ -107,6 +134,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseRateLimiter();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -116,5 +145,15 @@ app.UseMiddleware<SubscriptionStatusMiddleware>();
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
