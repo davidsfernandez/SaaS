@@ -30,4 +30,16 @@ public class AsaasPaymentResponse
     public string InvoiceUrl { get; set; } = string.Empty;
     public string BankSlipUrl { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public decimal Value { get; set; }
+    public string DueDate { get; set; } = string.Empty;
+}
+
+public class AsaasPaymentListResponse
+{
+    public List<AsaasPaymentResponse> Data { get; set; } = new();
+}
+
+public class AsaasSubscriptionUpdateRequest
+{
+    public decimal Value { get; set; }
 }

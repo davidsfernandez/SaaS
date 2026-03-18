@@ -32,6 +32,7 @@ builder.Services.AddScoped<ITenantStatusService, TenantStatusService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IBillingService, BillingService>();
 builder.Services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
 builder.Services.AddHttpClient<IAsaasService, AsaasService>();
 

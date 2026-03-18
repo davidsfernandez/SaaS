@@ -1,0 +1,184 @@
+@page
+@model SaasAsaasApp.Pages.Billing.IndexModel
+@{
+    ViewData["Title"] = "Billing Center";
+}
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2"><i class="bi bi-credit-card-2-back me-2"></i>Billing Center</h1>
+            <p class="text-muted">Manage your subscription, plans, and view your payment history.</p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        var alertClass = Model.StatusMessage.StartsWith("Error") ? "alert-danger" : "alert-success";
+        <div class="alert @alertClass alert-dismissible fade show" role="alert">
+            @Model.StatusMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-bottom-0 pt-3">
+            <ul class="nav nav-tabs card-header-tabs" id="billingTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold" id="plan-tab" data-bs-toggle="tab" data-bs-target="#plan" type="button" role="tab" aria-controls="plan" aria-selected="true">
+                        <i class="bi bi-star me-2"></i>Subscription Plan
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">
+                        <i class="bi bi-clock-history me-2"></i>Invoice History
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body p-4">
+            <div class="tab-content" id="billingTabsContent">
+                <!-- Subscription Plan Tab -->
+                <div class="tab-pane fade show active" id="plan" role="tabpanel" aria-labelledby="plan-tab">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card bg-primary text-white h-100 border-0 shadow-sm">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title opacity-75">Current Plan</h5>
+                                    <h2 class="display-6 fw-bold mb-3">@Model.CurrentPlan.DisplayName</h2>
+                                    <div class="mt-auto">
+                                        <p class="mb-1"><i class="bi bi-check-circle-fill me-2"></i> @Model.CurrentPlan.MaxUsers Users</p>
+                                        <p class="mb-1"><i class="bi bi-check-circle-fill me-2"></i> @Model.CurrentPlan.MaxProjects Projects</p>
+                                        <p class="mb-0"><i class="bi bi-check-circle-fill me-2"></i> @Model.CurrentPlan.BillingCycle Billing</p>
+                                    </div>
+                                    <hr class="bg-white opacity-25">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fs-4 fw-bold">@Model.CurrentPlan.Price.ToString("C")</span>
+                                        <span class="badge bg-white text-primary">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="mb-3">Available Plans</h5>
+                            @if (!Model.CanChangePlan)
+                            {
+                                <div class="alert alert-warning mb-4">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    Plan changes are currently restricted. Please ensure all previous invoices are paid.
+                                </div>
+                            }
+                            <div class="list-group shadow-sm">
+                                @foreach (var plan in Model.AvailablePlans)
+                                {
+                                    var isCurrent = plan.Id == Model.CurrentPlan.Id;
+                                    <div class="list-group-item list-group-item-action p-3 @(isCurrent ? "bg-light" : "")">
+                                        <div class="d-flex w-100 justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1 fw-bold">@plan.DisplayName</h6>
+                                                <p class="mb-1 text-muted small">
+                                                    @plan.MaxUsers Users, @plan.MaxProjects Projects • @plan.BillingCycle
+                                                </p>
+                                                <span class="fw-bold text-primary">@plan.Price.ToString("C")</span>
+                                            </div>
+                                            <div>
+                                                @if (isCurrent)
+                                                {
+                                                    <span class="badge bg-secondary px-3 py-2">Current Plan</span>
+                                                }
+                                                else
+                                                {
+                                                    <form method="post" asp-page-handler="ChangePlan" asp-route-planId="@plan.Id">
+                                                        <button type="submit" class="btn btn-outline-primary btn-sm px-4" @(Model.CanChangePlan ? "" : "disabled")>
+                                                            @(plan.Price > Model.CurrentPlan.Price ? "Upgrade" : "Downgrade")
+                                                        </button>
+                                                    </form>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice History Tab -->
+                <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                    @if (Model.IsApiError)
+                    {
+                        <div class="alert alert-danger py-4 text-center">
+                            <i class="bi bi-exclamation-triangle-fill display-4 mb-3 d-block"></i>
+                            <h5>System temporarily unavailable</h5>
+                            <p class="mb-0">We are unable to retrieve your payment history at this time. Please try again later.</p>
+                        </div>
+                    }
+                    else if (Model.PaymentHistory == null || !Model.PaymentHistory.Data.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-receipt text-muted display-1"></i>
+                            <p class="mt-3 text-muted">No payment history found.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var payment in Model.PaymentHistory.Data.OrderByDescending(p => p.DueDate))
+                                    {
+                                        <tr>
+                                            <td>@DateTime.Parse(payment.DueDate).ToShortDateString()</td>
+                                            <td class="fw-bold">@payment.Value.ToString("C")</td>
+                                            <td>
+                                                @switch (payment.Status)
+                                                {
+                                                    case "RECEIVED":
+                                                    case "CONFIRMED":
+                                                    case "RECEIVED_IN_CASH":
+                                                        <span class="badge bg-success">Paid</span>
+                                                        break;
+                                                    case "PENDING":
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                        break;
+                                                    case "OVERDUE":
+                                                        <span class="badge bg-danger">Overdue</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-secondary">@payment.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td class="text-end">
+                                                @if (!string.IsNullOrEmpty(payment.InvoiceUrl))
+                                                {
+                                                    <a href="@payment.InvoiceUrl" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                                        <i class="bi bi-download me-1"></i> Invoice
+                                                    </a>
+                                                }
+                                                @if (!string.IsNullOrEmpty(payment.BankSlipUrl))
+                                                {
+                                                    <a href="@payment.BankSlipUrl" target="_blank" class="btn btn-sm btn-outline-primary ms-1">
+                                                        <i class="bi bi-file-earmark-pdf me-1"></i> Bank Slip
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

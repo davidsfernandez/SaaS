@@ -96,6 +96,56 @@ public class AsaasService : IAsaasService
         }
     }
 
+    public async Task<AsaasPaymentListResponse?> ListPaymentsAsync(string customerId)
+    {
+        try
+        {
+            PrepareHeaders();
+            var response = await _httpClient.GetAsync($"{_settings.BaseUrl}/payments?customer={customerId}&limit=100");
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                _logger.LogError("Asaas API error (ListPayments): {Error}", error);
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<AsaasPaymentListResponse>(GetJsonOptions());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception while calling Asaas API (ListPayments)");
+            return null;
+        }
+    }
+
+    public async Task<AsaasPaymentResponse?> UpdateSubscriptionAsync(string subscriptionId, decimal newValue)
+    {
+        try
+        {
+            PrepareHeaders();
+            var request = new AsaasSubscriptionUpdateRequest { Value = newValue };
+            var json = JsonSerializer.Serialize(request, GetJsonOptions());
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"{_settings.BaseUrl}/subscriptions/{subscriptionId}", content);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                _logger.LogError("Asaas API error (UpdateSubscription): {Error}", error);
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<AsaasPaymentResponse>(GetJsonOptions());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception while calling Asaas API (UpdateSubscription)");
+            return null;
+        }
+    }
+
     private void PrepareHeaders()
     {
         _httpClient.DefaultRequestHeaders.Clear();
