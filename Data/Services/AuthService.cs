@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SaasAsaasApp.Data.Entities;
@@ -39,6 +40,18 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> RegisterTenantAsync(RegisterRequest request)
     {
+        var slug = request.CompanyName.ToLower().Replace(" ", "-");
+        
+        // Check if slug already exists to avoid DB exception
+        var existingTenant = await _context.Tenants
+            .IgnoreQueryFilters()
+            .AnyAsync(t => t.Slug == slug);
+
+        if (existingTenant)
+        {
+            return new AuthResponse { Success = false, Message = "A company with this name already exists. Please choose another one." };
+        }
+
         using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
@@ -47,7 +60,7 @@ public class AuthService : IAuthService
             {
                 Id = Guid.NewGuid(),
                 Name = request.CompanyName,
-                Slug = request.CompanyName.ToLower().Replace(" ", "-"),
+                Slug = slug,
                 Email = request.Email,
                 TaxId = request.TaxId,
                 CurrentPlanId = request.PlanId,

@@ -61,7 +61,7 @@ public class SubscriptionStatusMiddleware
 
             if (status == TenantStatus.Canceled)
             {
-                context.Response.Redirect("/Account/SubscriptionCanceled");
+                context.Response.Redirect("/Account/AccessDenied");
                 return;
             }
         }

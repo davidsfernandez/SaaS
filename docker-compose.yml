@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      # Montaje directo a carpeta local para persistencia absoluta
+      # Direct mount to local folder for absolute persistence
       - ./.docker/db_data:/var/lib/postgresql/data
 
   app:
@@ -22,13 +22,14 @@ services:
     restart: always
     env_file:
       - .env
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5000:8080"
     volumes:
-      # Volumen persistente para archivos de usuario (Uploads)
+      # Persistent volume for user files
       - ./.docker/user_uploads:/app/wwwroot/uploads
+      # Persistent volume for ASP.NET DataProtection keys (avoids Antiforgery/Login errors on restart)
+      - ./.docker/dp_keys:/root/.aspnet/DataProtection-Keys
+      # Persistent volume for structured logs
       - ./.docker/logs:/app/Logs
     depends_on:
       - db
