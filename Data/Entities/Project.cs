@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SaasAsaasApp.Data.Interfaces;
+using SaasAsaasApp.Data.Enums;
 
 namespace SaasAsaasApp.Data.Entities;
 
@@ -16,6 +17,11 @@ public class Project : ITenantEntity, IAuditableEntity, ISoftDeletable
     public string Title { get; set; } = string.Empty;
 
     public string? Description { get; set; }
+
+    /// <summary>
+    /// Current status of the project.
+    /// </summary>
+    public ProjectStatus Status { get; set; } = ProjectStatus.Active;
 
     public decimal EstimatedValue { get; set; }
 

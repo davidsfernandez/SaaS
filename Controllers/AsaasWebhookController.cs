@@ -32,10 +32,19 @@ public class AsaasWebhookController : ControllerBase
     public async Task<IActionResult> Post([FromBody] JsonElement rawEvent)
     {
         // 1. Security Validation: Check Webhook Access Token
+        // The 'asaas-access-token' header is configured in the Asaas dashboard
+        // and must match the WebhookToken in our configuration to ensure the request
+        // is coming from a trusted source.
+        if (string.IsNullOrEmpty(_settings.WebhookToken))
+        {
+            _logger.LogCritical("Asaas Webhook Token is not configured in application settings.");
+            return StatusCode(500, "Webhook security configuration missing.");
+        }
+
         if (!Request.Headers.TryGetValue("asaas-access-token", out var receivedToken) || 
             receivedToken != _settings.WebhookToken)
         {
-            _logger.LogWarning("Unauthorized webhook attempt from IP: {IP}", HttpContext.Connection.RemoteIpAddress);
+            _logger.LogWarning("Unauthorized webhook attempt from IP: {IP}. Missing or invalid 'asaas-access-token' header.", HttpContext.Connection.RemoteIpAddress);
             return Unauthorized();
         }
 

@@ -24,18 +24,18 @@ public class SubscriptionPlan : IAuditableEntity, ISoftDeletable
 
     public bool IsActive { get; set; } = true;
 
-    // Límites (Quotas)
+    // Limits (Quotas)
     public int MaxUsers { get; set; }
     public int MaxProjects { get; set; }
     
     // Feature Flags (JSON)
     public string FeaturesJson { get; set; } = "{}";
 
-    // Integración Asaas
+    // Asaas Integration
     [MaxLength(100)]
     public string? AsaasPlanId { get; set; }
 
-    // Auditoría y Soft Delete
+    // Audit and Soft Delete
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
