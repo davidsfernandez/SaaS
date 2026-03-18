@@ -1,0 +1,65 @@
+/**
+ * Sneat Theme Default Variables
+ * 100% English comments
+ */
+
+:root {
+  --bs-primary: #696cff;
+  --bs-primary-rgb: 105, 108, 255;
+  --bs-secondary: #8592a3;
+  --bs-secondary-rgb: 133, 146, 163;
+  --bs-success: #71dd37;
+  --bs-success-rgb: 113, 221, 55;
+  --bs-info: #03c3ec;
+  --bs-info-rgb: 3, 195, 236;
+  --bs-warning: #ffab00;
+  --bs-warning-rgb: 255, 171, 0;
+  --bs-danger: #ff3e1d;
+  --bs-danger-rgb: 255, 62, 29;
+  --bs-light: #f5f5f9;
+  --bs-light-rgb: 245, 245, 249;
+  --bs-dark: #233446;
+  --bs-dark-rgb: 35, 52, 70;
+  --bs-gray: #a1acb8;
+  --bs-gray-dark: #444444;
+  --bs-gray-100: #f5f5f9;
+  --bs-gray-200: #eceef1;
+  --bs-gray-300: #d9dee3;
+  --bs-gray-400: #c7cfd6;
+  --bs-gray-500: #a1acb8;
+  --bs-gray-600: #8592a3;
+  --bs-gray-700: #697a8d;
+  --bs-gray-800: #566a7f;
+  --bs-gray-900: #435971;
+
+  --bs-body-bg: #f5f5f9;
+  --bs-body-color: #697a8d;
+  --bs-heading-color: #566a7f;
+  --bs-link-color: #696cff;
+  --bs-link-hover-color: #5f61e6;
+  --bs-border-color: #d9dee3;
+}
+
+.bg-menu-theme {
+  background-color: #fff !important;
+  color: #697a8d;
+}
+
+.bg-navbar-theme {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #697a8d;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #696cff;
+  border-color: #696cff;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #5f61e6;
+  border-color: #5f61e6;
+  transform: translateY(-1px);
+}

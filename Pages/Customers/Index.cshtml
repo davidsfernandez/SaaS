@@ -1,71 +1,88 @@
 @page
 @model SaasAsaasApp.Pages.Customers.IndexModel
 @{
-    ViewData["Title"] = "My Customers";
+    ViewData["Title"] = "Customers";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-people-fill me-2"></i>Customers</h2>
-    <a asp-page="./Create" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i> Add New Customer
-    </a>
-</div>
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Business /</span> Customers
+</h4>
 
-<div class="card shadow-sm">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Customer List</h5>
+        <a asp-page="./Create" class="btn btn-primary">
+            <span class="tf-icons bx bx-plus me-1"></span> Add New Customer
+        </a>
+    </div>
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Contact</th>
+                    <th>Document</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (!Model.Customers.Any())
+                {
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Document</th>
-                        <th>Created At</th>
-                        <th class="text-end">Actions</th>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bx bx-user-x fs-1 mb-3"></i><br />
+                            No customers found. Click "Add New Customer" to start.
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @if (!Model.Customers.Any())
+                }
+                else
+                {
+                    @foreach (var customer in Model.Customers)
                     {
                         <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                No customers found. Click "Add New" to start.
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <div class="avatar avatar-sm me-3">
+                                        <span class="avatar-initial rounded-circle bg-label-primary">
+                                            @(string.IsNullOrEmpty(customer.Name) ? "U" : customer.Name.Substring(0, 1).ToUpper())
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <strong class="text-body text-truncate">@customer.Name</strong>
+                                        <small class="text-muted">@customer.Email</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span><i class="bx bx-phone bx-xs text-muted me-1"></i> @customer.Phone</span>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-label-secondary">@customer.Document</span></td>
+                            <td>@customer.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-page="./Edit" asp-route-id="@customer.Id">
+                                            <i class="bx bx-edit-alt me-1"></i> Edit
+                                        </a>
+                                        <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="confirmDelete('@customer.Id')">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     }
-                    else
-                    {
-                        @foreach (var customer in Model.Customers)
-                        {
-                            <tr>
-                                <td class="fw-bold">@customer.Name</td>
-                                <td>@customer.Email</td>
-                                <td>@customer.Phone</td>
-                                <td>@customer.Document</td>
-                                <td>@customer.CreatedAt.ToLocalTime().ToString("g")</td>
-                                <td class="text-end">
-                                    <div class="btn-group btn-group-sm">
-                                        <a asp-page="./Edit" asp-route-id="@customer.Id" class="btn btn-outline-secondary">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button class="btn btn-outline-danger" onclick="confirmDelete('@customer.Id')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
-
-@section Styles {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-}
 
 @section Scripts {
     <script>

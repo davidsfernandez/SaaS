@@ -1,14 +1,14 @@
 @page
-@model SaasAsaasApp.Pages.Account.RegisterModel
+@model SaasAsaasApp.Pages.Account.LoginModel
 @{
     Layout = "_Layout";
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Login";
 }
 
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner py-4">
-            <!-- Register Card -->
+            <!-- Login -->
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <!-- Logo -->
@@ -23,72 +23,49 @@
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <h4 class="mb-2">Adventure starts here 🚀</h4>
-                    <p class="mb-4">Make your app management easy and fun!</p>
+                    <h4 class="mb-2">Welcome to SaasAsaas! 👋</h4>
+                    <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
                     <form id="formAuthentication" class="mb-3" method="POST">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
-                        <div class="mb-3">
-                            <label asp-for="Input.FullName" class="form-label">Full Name</label>
-                            <input asp-for="Input.FullName" class="form-control" placeholder="Enter your name" autofocus />
-                            <span asp-validation-for="Input.FullName" class="text-danger"></span>
-                        </div>
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
                         <div class="mb-3">
                             <label asp-for="Input.Email" class="form-label">Email</label>
-                            <input asp-for="Input.Email" class="form-control" placeholder="Enter your email" />
+                            <input asp-for="Input.Email" class="form-control" placeholder="Enter your email" autofocus />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
                         <div class="mb-3 form-password-toggle">
-                            <label asp-for="Input.Password" class="form-label">Password</label>
+                            <div class="d-flex justify-content-between">
+                                <label asp-for="Input.Password" class="form-label">Password</label>
+                                <a href="#">
+                                    <small>Forgot Password?</small>
+                                </a>
+                            </div>
                             <div class="input-group input-group-merge">
                                 <input asp-for="Input.Password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
-
-                        <hr class="my-4">
-                        <h6 class="text-muted fw-normal mb-3">Company Information</h6>
-
-                        <div class="mb-3">
-                            <label asp-for="Input.CompanyName" class="form-label">Company Name</label>
-                            <input asp-for="Input.CompanyName" class="form-control" placeholder="Acme Inc." />
-                            <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Input.TaxId" class="form-label">Tax ID (CPF/CNPJ)</label>
-                            <input asp-for="Input.TaxId" class="form-control" placeholder="00.000.000/0001-00" />
-                            <span asp-validation-for="Input.TaxId" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Input.PlanId" class="form-label">Subscription Plan</label>
-                            <select asp-for="Input.PlanId" asp-items="Model.Plans" class="form-select">
-                                <option value="">Select a plan</option>
-                            </select>
-                            <span asp-validation-for="Input.PlanId" class="text-danger"></span>
-                        </div>
-
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" required />
-                                <label class="form-check-label" for="terms-conditions">
-                                    I agree to <a href="javascript:void(0);">privacy policy & terms</a>
-                                </label>
+                                <input asp-for="Input.RememberMe" class="form-check-input" type="checkbox" />
+                                <label asp-for="Input.RememberMe" class="form-check-label"> Remember Me </label>
                             </div>
                         </div>
-                        <button class="btn btn-primary d-grid w-100">Sign up</button>
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                        </div>
                     </form>
 
                     <p class="text-center">
-                        <span>Already have an account?</span>
-                        <a asp-page="./Login">
-                            <span>Sign in instead</span>
+                        <span>New on our platform?</span>
+                        <a asp-page="./Register">
+                            <span>Create an account</span>
                         </a>
                     </p>
                 </div>
             </div>
-            <!-- Register Card -->
+            <!-- /Login -->
         </div>
     </div>
 </div>
@@ -96,7 +73,7 @@
 @section Styles {
     <style>
         .authentication-wrapper { display: flex; flex-basis: 100%; min-height: 100vh; width: 100%; align-items: center; justify-content: center; }
-        .authentication-inner { width: 100%; max-width: 450px; }
+        .authentication-inner { width: 100%; max-width: 400px; }
     </style>
 }
 

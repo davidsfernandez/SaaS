@@ -5,88 +5,116 @@
     ViewData["Title"] = "Projects";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-briefcase-fill me-2"></i>Projects</h2>
-    <a asp-page="./Create" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i> Create New Project
-    </a>
-</div>
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Business /</span> Projects
+</h4>
 
-<div class="card shadow-sm">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Project List</h5>
+        <a asp-page="./Create" class="btn btn-primary">
+            <span class="tf-icons bx bx-plus me-1"></span> Create New Project
+        </a>
+    </div>
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Customer</th>
+                    <th>Estimated Value</th>
+                    <th>Start Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (!Model.Projects.Any())
+                {
                     <tr>
-                        <th>Title</th>
-                        <th>Customer</th>
-                        <th>Estimated Value</th>
-                        <th>Start Date</th>
-                        <th>Status</th>
-                        <th class="text-end">Actions</th>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bx bx-folder-minus fs-1 mb-3"></i><br />
+                            No projects found. Click "Create New Project" to start.
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @if (!Model.Projects.Any())
+                }
+                else
+                {
+                    @foreach (var project in Model.Projects)
                     {
                         <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                No projects found. Click "Create New" to start.
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <div class="avatar avatar-sm me-3">
+                                        <span class="avatar-initial rounded bg-label-info"><i class="bx bx-briefcase"></i></span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <strong class="text-body text-truncate">@project.Title</strong>
+                                    </div>
+                                </div>
                             </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        @foreach (var project in Model.Projects)
-                        {
-                            <tr>
-                                <td class="fw-bold">@project.Title</td>
-                                <td>@(project.Customer?.Name ?? "N/A")</td>
-                                <td>@project.EstimatedValue.ToString("C")</td>
-                                <td>@(project.StartDate?.ToLocalTime().ToString("d") ?? "N/A")</td>
-                                <td>
-                                    @switch (project.Status)
-                                    {
-                                        case ProjectStatus.Active:
-                                            <span class="badge bg-success">Active</span>
-                                            break;
-                                        case ProjectStatus.Paused:
-                                            <span class="badge bg-warning text-dark">Paused</span>
-                                            break;
-                                        case ProjectStatus.Completed:
-                                            <span class="badge bg-info text-dark">Completed</span>
-                                            break;
-                                        case ProjectStatus.Canceled:
-                                            <span class="badge bg-danger">Canceled</span>
-                                            break;
-                                        default:
-                                            <span class="badge bg-secondary">@project.Status</span>
-                                            break;
-                                    }
-                                </td>
-                                <td class="text-end">
-                                    <div class="btn-group btn-group-sm">
-                                        <a asp-page="./Edit" asp-route-id="@project.Id" class="btn btn-outline-secondary">
-                                            <i class="bi bi-pencil"></i>
+                            <td>
+                                @if (project.Customer != null)
+                                {
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-xs me-2">
+                                            <span class="avatar-initial rounded-circle bg-label-primary" style="font-size: 0.75rem;">
+                                                @(string.IsNullOrEmpty(project.Customer.Name) ? "C" : project.Customer.Name.Substring(0, 1).ToUpper())
+                                            </span>
+                                        </div>
+                                        <span>@project.Customer.Name</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td><strong>@project.EstimatedValue.ToString("C")</strong></td>
+                            <td>@(project.StartDate?.ToLocalTime().ToString("MMM dd, yyyy") ?? "N/A")</td>
+                            <td>
+                                @switch (project.Status)
+                                {
+                                    case ProjectStatus.Active:
+                                        <span class="badge rounded-pill bg-label-success"><i class="bx bx-check-circle bx-xs me-1"></i> Active</span>
+                                        break;
+                                    case ProjectStatus.Paused:
+                                        <span class="badge rounded-pill bg-label-warning"><i class="bx bx-pause-circle bx-xs me-1"></i> Paused</span>
+                                        break;
+                                    case ProjectStatus.Completed:
+                                        <span class="badge rounded-pill bg-label-info"><i class="bx bx-check-double bx-xs me-1"></i> Completed</span>
+                                        break;
+                                    case ProjectStatus.Canceled:
+                                        <span class="badge rounded-pill bg-label-danger"><i class="bx bx-x-circle bx-xs me-1"></i> Canceled</span>
+                                        break;
+                                    default:
+                                        <span class="badge rounded-pill bg-label-secondary">@project.Status</span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-page="./Edit" asp-route-id="@project.Id">
+                                            <i class="bx bx-edit-alt me-1"></i> Edit
                                         </a>
                                         <form method="post" asp-page-handler="Delete" asp-route-id="@project.Id" 
                                               onsubmit="return confirm('Are you sure you want to delete this project?');" 
-                                              style="display:inline;">
-                                            <button type="submit" class="btn btn-outline-danger">
-                                                <i class="bi bi-trash"></i>
+                                              id="delete-form-@project.Id">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="bx bx-trash me-1"></i> Delete
                                             </button>
                                         </form>
                                     </div>
-                                </td>
-                            </tr>
-                        }
+                                </div>
+                            </td>
+                        </tr>
                     }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
-
-@section Styles {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-}

@@ -1,88 +1,248 @@
+@using Microsoft.AspNetCore.Identity
+@using SaasAsaasApp.Data.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SaasAsaasApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
-<body class="bg-light">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-white bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-page="/Index">
-                    <i class="bi bi-rocket-takeoff-fill me-2"></i>SaasAsaas
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        @if (User.Identity?.IsAuthenticated ?? false)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Customers/Index">Customers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Projects/Index">Projects</a>
-                            </li>
-                        }
-                    </ul>
-                    <ul class="navbar-nav">
-                        @if (User.Identity?.IsAuthenticated ?? false)
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-primary fw-bold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-1"></i> @User.FindFirst("FullName")?.Value
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" asp-page="/Billing/Index"><i class="bi bi-credit-card me-2"></i>Subscription</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form class="form-inline" asp-page="/Account/Logout" method="post">
-                                            <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Account/Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-primary ms-2" asp-page="/Account/Register">Register</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>@ViewData["Title"] | SaasAsaasApp</title>
 
-    <footer class="border-top footer text-muted bg-white mt-5 py-3">
-        <div class="container text-center">
-            &copy; 2026 - SaasAsaasApp - <a asp-area="" asp-page="/Privacy">Privacy Policy</a>
-        </div>
-    </footer>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/assets/img/favicon/favicon.ico" />
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
-    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Icons. Default: boxicons -->
+    <link rel="stylesheet" href="~/assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="~/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="~/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <!-- Page CSS -->
     @await RenderSectionAsync("Styles", required: false)
+
+    <!-- Helpers -->
+    <script src="~/assets/vendor/js/helpers.js"></script>
+
+    <!-- Config -->
+    <script src="~/assets/js/config.js"></script>
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar @(SignInManager.IsSignedIn(User) ? "" : "layout-without-menu")">
+        <div class="layout-container">
+            
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <!-- Menu -->
+                <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                    <div class="app-brand demo">
+                        <a asp-page="/Index" class="app-brand-link">
+                            <span class="app-brand-logo demo">
+                                <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <defs>
+                                        <path d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.24599937,34.4417935 9.00424854,36.0665439 L9.2637431,36.1612488 L9.12735957,36.215118 L12.1788116,38.4017003 C12.1788116,38.4017003 13.1309381,39.2962729 14.5040351,39.1258989 C15.8771321,38.955525 16.7795395,37.8971274 16.7795395,37.8971274 L16.7795395,37.8971274 L31.4527242,14.2441333 C32.3237433,12.7962893 32.3039435,11.5462719 31.3930301,10.3996254 C30.2627934,8.98461751 28.492496,8.15104832 26.0505688,7.89973637 L23.2799047,7.41953261 L13.7918663,0.358365126 Z" id="path-1"></path>
+                                    </defs>
+                                    <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                                            <g id="Icon" transform="translate(27.000000, 15.000000)">
+                                                <g id="Mask" transform="translate(0.000000, 8.000000)">
+                                                    <mask id="mask-2" fill="white"><use xlink:href="#path-1"></use></mask>
+                                                    <use fill="#696cff" xlink:href="#path-1"></use>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </span>
+                            <span class="app-brand-text demo menu-text fw-bolder ms-2">SaasAsaas</span>
+                        </a>
+
+                        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                        </a>
+                    </div>
+
+                    <div class="menu-inner-shadow"></div>
+
+                    <ul class="menu-inner py-1">
+                        <!-- Dashboard -->
+                        <li class="menu-item @(ViewContext.HttpContext.Request.Path == "/" ? "active" : "")">
+                            <a asp-page="/Index" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                                <div data-i18n="Analytics">Dashboard</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-header small text-uppercase">
+                            <span class="menu-header-text">Business</span>
+                        </li>
+                        
+                        <!-- Customers -->
+                        <li class="menu-item @(ViewContext.HttpContext.Request.Path.StartsWithSegments("/Customers") ? "active" : "")">
+                            <a asp-page="/Customers/Index" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-user"></i>
+                                <div data-i18n="Customers">Customers</div>
+                            </a>
+                        </li>
+
+                        <!-- Projects -->
+                        <li class="menu-item @(ViewContext.HttpContext.Request.Path.StartsWithSegments("/Projects") ? "active" : "")">
+                            <a asp-page="/Projects/Index" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-briefcase"></i>
+                                <div data-i18n="Projects">Projects</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-header small text-uppercase">
+                            <span class="menu-header-text">Account</span>
+                        </li>
+
+                        <!-- Billing -->
+                        <li class="menu-item @(ViewContext.HttpContext.Request.Path.StartsWithSegments("/Billing") ? "active" : "")">
+                            <a asp-page="/Billing/Index" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                                <div data-i18n="Billing">Billing & Plan</div>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+                <!-- / Menu -->
+            }
+
+            <!-- Layout page -->
+            <div class="layout-page">
+                <!-- Navbar -->
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                            <i class="bx bx-menu bx-sm"></i>
+                        </a>
+                    </div>
+
+                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                        <!-- Search -->
+                        <div class="navbar-nav align-items-center">
+                            <div class="nav-item d-flex align-items-center">
+                                <i class="bx bx-search fs-4 lh-0"></i>
+                                <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
+                            </div>
+                        </div>
+                        <!-- /Search -->
+
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <!-- User -->
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                        <div class="avatar avatar-online">
+                                            <img src="~/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-online">
+                                                            <img src="~/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <span class="fw-semibold d-block">@User.FindFirst("FullName")?.Value</span>
+                                                        <small class="text-muted">Administrator</small>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li><div class="dropdown-divider"></div></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/Billing/Index">
+                                                <i class="bx bx-credit-card me-2"></i>
+                                                <span class="align-middle">Billing</span>
+                                            </a>
+                                        </li>
+                                        <li><div class="dropdown-divider"></div></li>
+                                        <li>
+                                            <form class="form-inline" asp-page="/Account/Logout" method="post">
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="bx bx-power-off me-2 text-danger"></i>
+                                                    <span class="align-middle text-danger">Log Out</span>
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a asp-page="/Account/Login" class="btn btn-outline-primary me-2">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-page="/Account/Register" class="btn btn-primary">Get Started</a>
+                                </li>
+                            }
+                            <!--/ User -->
+                        </ul>
+                    </div>
+                </nav>
+                <!-- / Navbar -->
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        @RenderBody()
+                    </div>
+                    <!-- / Content -->
+
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                            <div class="mb-2 mb-md-0">
+                                © 2026, made with ❤️ by David Fernandez
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/assets/vendor/libs/popper/popper.js"></script>
+    <script src="~/assets/vendor/js/bootstrap.js"></script>
+    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/assets/vendor/js/menu.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

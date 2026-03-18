@@ -1,62 +1,150 @@
 @page
 @model SaasAsaasApp.Pages.Billing.OnboardingModel
 @{
-    ViewData["Title"] = "Complete your Activation";
+    ViewData["Title"] = "Subscription Required";
+    Layout = null;
 }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h2 class="mb-4">Welcome, @Model.CompanyName!</h2>
-            <p class="lead text-muted">You're just one step away from activating your SaaS dashboard.</p>
-            
-            <div class="card border-primary mb-4 shadow">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Selected Plan: @Model.PlanName</h5>
-                </div>
-                <div class="card-body">
-                    <h3 class="display-4 mb-0">R$ @Model.Amount.ToString("N2")</h3>
-                    <p class="text-muted">Monthly subscription</p>
-                    <hr />
-                    
-                    <div class="row mt-4">
-                        <div class="col-md-6 mb-3">
-                            <div class="p-3 border rounded bg-light h-100">
-                                <i class="bi bi-qr-code-scan display-6 text-primary mb-2"></i>
-                                <h6>Pay with PIX</h6>
-                                <p class="small text-muted">Instant activation. Use your banking app to scan the code.</p>
-                                <button class="btn btn-outline-primary btn-sm">Generate PIX QR Code</button>
+<!DOCTYPE html>
+<html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="~/assets/" data-template="vertical-menu-template-free">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>@ViewData["Title"] - SaasAsaas</title>
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="~/assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="~/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="~/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css" />
+
+    <!-- Helpers -->
+    <script src="~/assets/vendor/js/helpers.js"></script>
+    <script src="~/assets/js/config.js"></script>
+</head>
+<body>
+    <div class="container-xxl">
+        <div class="authentication-wrapper authentication-basic container-p-y">
+            <div class="authentication-inner py-4" style="max-width: 600px;">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <!-- Logo -->
+                        <div class="app-brand justify-content-center mb-4">
+                            <a href="/" class="app-brand-link gap-2">
+                                <span class="app-brand-logo demo">
+                                    <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <defs>
+                                            <path d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.24599937,34.4417935 9.00424854,36.0665439 L9.2637431,36.1612488 L9.12735957,36.215118 L12.1788116,38.4017003 C12.1788116,38.4017003 13.1309381,39.2962729 14.5040351,39.1258989 C15.8771321,38.955525 16.7795395,37.8971274 16.7795395,37.8971274 L16.7795395,37.8971274 L31.4527242,14.2441333 C32.3237433,12.7962893 32.3039435,11.5462719 31.3930301,10.3996254 C30.2627934,8.98461751 28.492496,8.15104832 26.0505688,7.89973637 L23.2799047,7.41953261 L13.7918663,0.358365126 Z" id="path-1"></path>
+                                        </defs>
+                                        <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                                                <g id="Icon" transform="translate(27.000000, 15.000000)">
+                                                    <g id="Mask" transform="translate(0.000000, 8.000000)">
+                                                        <mask id="mask-2" fill="white"><use xlink:href="#path-1"></use></mask>
+                                                        <use fill="#696cff" xlink:href="#path-1"></use>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </span>
+                                <span class="app-brand-text demo text-body fw-bolder text-capitalize ms-2">SaasAsaas</span>
+                            </a>
+                        </div>
+                        <!-- /Logo -->
+                        
+                        <div class="text-center mb-4">
+                            <h4 class="mb-2">Welcome, @Model.CompanyName! 👋</h4>
+                            <p class="text-muted">Your account is almost ready. Please complete your subscription payment to unlock all premium features.</p>
+                        </div>
+
+                        <div class="card bg-label-primary mb-4 border-0">
+                            <div class="card-body text-center p-4">
+                                <h5 class="card-title text-primary mb-3">Selected Plan: @Model.PlanName</h5>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <h1 class="display-4 fw-bold mb-0 text-primary">R$ @Model.Amount.ToString("N2")</h1>
+                                    <sub class="text-muted ms-1 fs-6">/ month</sub>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="p-3 border rounded bg-light h-100">
-                                <i class="bi bi-barcode display-6 text-primary mb-2"></i>
-                                <h6>Bank Slip</h6>
-                                <p class="small text-muted">Activation within 24-48 hours after payment.</p>
-                                <button class="btn btn-outline-primary btn-sm">Download Bank Slip PDF</button>
+
+                        <h6 class="text-muted text-center mb-3 text-uppercase">Choose Payment Method</h6>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border border-success shadow-none cursor-pointer hover-bg-lighter transition-all">
+                                    <div class="card-body text-center p-4">
+                                        <div class="avatar avatar-md mx-auto mb-3">
+                                            <span class="avatar-initial rounded-circle bg-label-success"><i class="bx bx-qr-scan fs-3"></i></span>
+                                        </div>
+                                        <h6 class="mb-1">Pay with PIX</h6>
+                                        <p class="small text-muted mb-3">Instant activation</p>
+                                        <button class="btn btn-success w-100">Generate PIX</button>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border border-info shadow-none cursor-pointer hover-bg-lighter transition-all">
+                                    <div class="card-body text-center p-4">
+                                        <div class="avatar avatar-md mx-auto mb-3">
+                                            <span class="avatar-initial rounded-circle bg-label-info"><i class="bx bx-barcode fs-3"></i></span>
+                                        </div>
+                                        <h6 class="mb-1">Bank Slip</h6>
+                                        <p class="small text-muted mb-3">1-2 days activation</p>
+                                        <button class="btn btn-info w-100">Download PDF</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-primary d-flex align-items-center mb-4" role="alert">
+                            <span class="alert-icon text-primary me-2">
+                                <i class="bx bx-info-circle bx-sm"></i>
+                            </span>
+                            <div class="small">
+                                Once your payment is confirmed by Asaas, your dashboard will be automatically unlocked and you will receive an email notification.
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <form class="form-inline" asp-page="/Account/Logout" method="post">
+                                <button type="submit" class="btn btn-link text-muted d-flex align-items-center justify-content-center w-100 text-decoration-none">
+                                    <i class="bx bx-log-out me-1"></i>
+                                    Sign out and pay later
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle-fill me-2"></i>
-                <strong>Note:</strong> Once your payment is confirmed by Asaas, your dashboard will be automatically unlocked.
-            </div>
-
-            <p class="mt-4">
-                <a asp-page="/Index" class="text-decoration-none small">
-                    <i class="bi bi-arrow-left"></i> Back to Home
-                </a>
-            </p>
         </div>
     </div>
-</div>
 
-@section Styles {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        .bi { vertical-align: middle; }
-    </style>
-}
+    <!-- Core JS -->
+    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/assets/vendor/libs/popper/popper.js"></script>
+    <script src="~/assets/vendor/js/bootstrap.js"></script>
+    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/assets/vendor/js/menu.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/assets/js/main.js"></script>
+</body>
+</html>
